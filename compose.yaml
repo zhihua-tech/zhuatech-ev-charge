@@ -1,0 +1,16 @@
+services:
+  ev-charge:
+    build: .
+    ports: ["18101:18101"]
+    environment:
+      PORT: 18101
+      CHARGE_API_KEY: ${CHARGE_API_KEY:-zhuatech-demo-key}
+      CHARGE_DATA_FILE: /app/data/charge.json
+    volumes: ["charge-data:/app/data"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:18101/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  charge-data:
